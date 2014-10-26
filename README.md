@@ -1,0 +1,4 @@
+goenum
+======
+
+enum for go
