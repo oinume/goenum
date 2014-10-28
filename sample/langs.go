@@ -37,9 +37,17 @@ func main() {
 	// --> Go
 
 	if len(os.Args) > 1 {
+		// $ go run sample/langs.go 2
 		value, _ := strconv.Atoi(os.Args[1])
-		fmt.Println(langs.MustName(value))
-		// go run sample/langs.go 3
-		// --> Ruby
+		switch value {
+		case Langs.Go:
+			fmt.Println("Gopher")
+		case Langs.Python:
+			fmt.Println("Pythonista")
+		case Langs.Ruby:
+			fmt.Println("Rubyist")
+		case Langs.Haskel:
+			fmt.Println("Haskeler")
+		}
 	}
 }
