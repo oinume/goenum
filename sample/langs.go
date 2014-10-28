@@ -9,9 +9,9 @@ import (
 )
 
 type LangsEnum struct {
-	Go int
+	Go     int
 	Python int
-	Ruby int
+	Ruby   int
 	Haskel int
 }
 
