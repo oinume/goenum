@@ -18,11 +18,12 @@ type LangsEnum struct {
 var Langs LangsEnum = LangsEnum{1, 2, 3, 4}
 
 func (e LangsEnum) Enum() goenum.Enum {
+	// Make Enum from Langs
 	return goenum.EnumerateStruct(&Langs)
 }
 
 func main() {
-	langs := Langs.Enum()
+	var langs goenum.Enum = Langs.Enum()
 
 	// Enumerate names
 	fmt.Println(langs.Names())
