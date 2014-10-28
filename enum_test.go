@@ -7,17 +7,17 @@ import (
 )
 
 type LangsEnum struct {
-	Go int
+	Go     int
 	Python int
-	Ruby int
-	Java int
+	Ruby   int
+	Java   int
 }
 
 var langs LangsEnum = LangsEnum{
-	Go: 1,
+	Go:     1,
 	Python: 2,
-	Ruby: 3,
-	Java: 4,
+	Ruby:   3,
+	Java:   4,
 }
 
 func (e LangsEnum) Enum() Enum {
@@ -28,7 +28,7 @@ func (e LangsEnum) Enum() Enum {
 }
 
 func TestNames(t *testing.T) {
-	expected := []string{ "Go", "Python", "Ruby", "Java" }
+	expected := []string{"Go", "Python", "Ruby", "Java"}
 	actual := langs.Enum().Names()
 	if !reflect.DeepEqual(actual, expected) {
 		t.Errorf("\nexpect %v\nactual %v", actual, expected)
@@ -37,7 +37,7 @@ func TestNames(t *testing.T) {
 }
 
 func TestValues(t *testing.T) {
-	expected := []int{ 1, 2, 3, 4 }
+	expected := []int{1, 2, 3, 4}
 	actual := langs.Enum().Values()
 	if !reflect.DeepEqual(actual, expected) {
 		t.Errorf("\nexpect %v\nactual %v", actual, expected)
@@ -55,9 +55,9 @@ func TestName(t *testing.T) {
 		t.Errorf("\nexpect %v\nactual %v", "Go", name)
 	}
 
-	_, err := langs.Enum().Name(0)
-	if err == nil {
-		t.Errorf("Must be err != nil")
+	_, has := langs.Enum().Name(0)
+	if has {
+		t.Errorf("Must be has = false")
 	}
 
 	//fmt.Println(langs.Enum().Name(1))

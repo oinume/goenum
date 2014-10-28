@@ -6,18 +6,18 @@ import (
 )
 
 type Enum struct {
-	structValue interface{}
-	reflectStructValue reflect.Value
-	mapValue map[int]string
+	structValue        interface{}
+	reflectStructValue reflect.Value  // TODO: Not used yet. For performance
+	mapValue           map[int]string // TODO: Implement map to Enum
 }
 
 type Enumerator interface {
-	Enum() *Enum
+	Enum() Enum
 }
 
 func EnumerateStruct(value interface{}) Enum {
 	return Enum{
-		structValue: value,
+		structValue:        value,
 		reflectStructValue: reflect.Indirect(reflect.ValueOf(value)),
 	}
 }
@@ -34,10 +34,8 @@ func (e Enum) Names() []string {
 	} else if e.mapValue != nil {
 		panic("Not implemented yet")
 	} else {
-		return []string{ "a" }
+		panic("Does'nt reach here")
 	}
-
-	return []string{ "a" }
 }
 
 func (e Enum) Values() []int {
@@ -51,8 +49,6 @@ func (e Enum) Values() []int {
 	} else {
 		panic("Not implemented yet")
 	}
-
-	return []int{ 1 }
 }
 
 func (e Enum) NameValues() map[int]string {
