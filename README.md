@@ -1,6 +1,6 @@
 # goenum
 
-enum for Go
+Enum for Go
 
 # Example
 
@@ -40,9 +40,13 @@ func main() {
 	fmt.Println(langs.Values())
 	// --> [1 2 3 4]
 
-	// Obtain name
+	// Obtain name from value
 	fmt.Println(langs.MustName(1))
 	// --> Go
+
+	// Obtain value from name
+	fmt.Println(langs.MustValue("Python"))
+	// --> 2
 
 	if len(os.Args) > 1 {
 		// $ go run sample/langs.go 2

@@ -62,3 +62,18 @@ func TestName(t *testing.T) {
 
 	//fmt.Println(langs.Enum().Name(1))
 }
+
+func TestValue(t *testing.T) {
+	value, _ := langs.Enum().Value("Python")
+	if value != langs.Python {
+		t.Errorf("\nexpect %v\nactual %v", langs.Python, value)
+	}
+
+	value, has := langs.Enum().Value("ObjectiveC")
+	if has {
+		t.Errorf("Must be has = false")
+	}
+	if value != -1 {
+		t.Errorf("value must be -1 when not found. value = %d", value)
+	}
+}

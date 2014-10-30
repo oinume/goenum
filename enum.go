@@ -76,3 +76,20 @@ func (e Enum) MustName(value int) string {
 	}
 	return name
 }
+
+func (e Enum) Value(name string) (int, bool) {
+	for v, n := range e.NameValues() {
+		if n == name {
+			return v, true
+		}
+	}
+	return -1, false
+}
+
+func (e Enum) MustValue(name string) int {
+	value, has := e.Value(name)
+	if !has {
+		panic(fmt.Sprintf("No value for %s", name))
+	}
+	return value
+}
