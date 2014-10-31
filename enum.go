@@ -5,31 +5,56 @@ import (
 	"reflect"
 )
 
+type enumElement struct {
+	value   int
+	name    string
+	aliases []string
+}
+
 type Enum struct {
 	structValue        interface{}
 	reflectStructValue reflect.Value  // TODO: Not used yet. For performance
 	mapValue           map[int]string // TODO: Implement map to Enum
+	valuesSlice        []int
+	elementsMap        map[int]enumElement
 }
 
 type Enumerator interface {
 	Enum() Enum
 }
 
-func EnumerateStruct(value interface{}) Enum {
-	return Enum{
-		structValue:        value,
-		reflectStructValue: reflect.Indirect(reflect.ValueOf(value)),
+func EnumerateStruct(target interface{}) Enum {
+	if target == nil {
+		panic("Argument 'target' is nil")
 	}
+
+	enum := Enum{
+		structValue:        target,
+		reflectStructValue: reflect.Indirect(reflect.ValueOf(target)),
+	}
+
+	value := enum.reflectStructValue
+	enum.valuesSlice = make([]int, value.Type().NumField())
+	enum.elementsMap = make(map[int]enumElement, value.Type().NumField())
+	for i := 0; i < value.Type().NumField(); i++ {
+		key := int(value.Field(i).Int())
+		enum.valuesSlice[i] = key
+		enum.elementsMap[key] = enumElement{
+			value: key,
+			name:  value.Type().Field(i).Name,
+			// TODO: aliases
+		}
+	}
+
+	return enum
 }
 
 func (e Enum) Names() []string {
 	if e.structValue != nil {
-		value := reflect.Indirect(reflect.ValueOf(e.structValue))
-		names := make([]string, value.Type().NumField())
-		for i := 0; i < value.Type().NumField(); i++ {
-			names[i] = value.Type().Field(i).Name
+		names := make([]string, len(e.valuesSlice))
+		for i := 0; i < len(names); i++ {
+			names[i] = e.elementsMap[e.valuesSlice[i]].name
 		}
-
 		return names
 	} else if e.mapValue != nil {
 		panic("Not implemented yet")
@@ -40,11 +65,8 @@ func (e Enum) Names() []string {
 
 func (e Enum) Values() []int {
 	if e.structValue != nil {
-		value := reflect.Indirect(reflect.ValueOf(e.structValue))
-		values := make([]int, value.Type().NumField())
-		for i := 0; i < value.Type().NumField(); i++ {
-			values[i] = int(value.Field(i).Int())
-		}
+		values := make([]int, len(e.valuesSlice))
+		copy(values, e.valuesSlice)
 		return values
 	} else {
 		panic("Not implemented yet")
@@ -53,9 +75,10 @@ func (e Enum) Values() []int {
 
 func (e Enum) NameValues() map[int]string {
 	nameValues := make(map[int]string)
-	value := reflect.Indirect(reflect.ValueOf(e.structValue))
-	for i := 0; i < value.Type().NumField(); i++ {
-		nameValues[int(value.Field(i).Int())] = value.Type().Field(i).Name
+	for i := 0; i < len(e.valuesSlice); i++ {
+		value := e.valuesSlice[i]
+		name := e.elementsMap[value].name
+		nameValues[value] = name
 	}
 	return nameValues
 }
