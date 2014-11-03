@@ -7,10 +7,10 @@ import (
 )
 
 type LangsEnum struct {
-	Go     int
-	Python int
-	Ruby   int
-	Java   int
+	Go     int `goenum:"go"`
+	Python int `goenum:"python"`
+	Ruby   int `goenum:"ruby"`
+	Java   int `goenum:"java"`
 }
 
 var langs LangsEnum = LangsEnum{
@@ -64,16 +64,65 @@ func TestName(t *testing.T) {
 }
 
 func TestValue(t *testing.T) {
-	value, _ := langs.Enum().Value("Python")
+	enum := langs.Enum()
+	value, _ := enum.Value("Python")
 	if value != langs.Python {
 		t.Errorf("\nexpect %v\nactual %v", langs.Python, value)
 	}
 
-	value, has := langs.Enum().Value("ObjectiveC")
+	value, has := enum.Value("ObjectiveC")
 	if has {
 		t.Errorf("Must be has = false")
 	}
 	if value != -1 {
 		t.Errorf("value must be -1 when not found. value = %d", value)
+	}
+}
+
+type AliasTest struct {
+	Exists  int `goenum:exists`
+	NotExists int
+}
+
+func (a AliasTest) Enum() Enum {
+	return EnumerateStruct(&a)
+}
+
+var aliasTest AliasTest = AliasTest{
+	Exists: 1,
+	NotExists: 2,
+}
+
+func TestAlias(t *testing.T) {
+	enum := langs.Enum()
+	alias, _ := enum.Alias(3)
+	if alias != "ruby" {
+		t.Errorf("\nexpect %v\nactual %v", "ruby", alias)
+	}
+
+	_, has := enum.Alias(0)
+	if has {
+		t.Errorf("Must be has = false")
+	}
+
+	//fmt.Println(langs.Enum().Name(1))
+
+	e := aliasTest.Enum()
+	e.Alias(2)
+	if alias2, has := e.Alias(2); has && alias2 != "" {
+		t.Errorf("\nexpect %v\nactual %v", "", alias2)
+	}
+}
+
+func TestValueForAlias(t *testing.T) {
+	enum := langs.Enum()
+	value, _ := enum.ValueForAlias("java")
+	if value != langs.Java {
+		t.Errorf("\nexpect %v\nactual %v", langs.Java, value)
+	}
+
+	_, has := enum.ValueForAlias("python3")
+	if has {
+		t.Errorf("Must be has = false")
 	}
 }
