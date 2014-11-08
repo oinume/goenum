@@ -1,3 +1,7 @@
+[![Build Status](http://img.shields.io/travis/oinume/goenum.svg?style=flat)](https://travis-ci.org/oinume/goenum)
+[![Coverage](http://img.shields.io/codecov/c/github/oinume/goenum.svg?style=flat)](https://codecov.io/github/oinume/goenum)
+[![License](http://img.shields.io/badge/license-MIT-red.svg?style=flat)](https://github.com/oinume/goenum/blob/master/LICENSE)
+
 # goenum
 
 Enum for Go
