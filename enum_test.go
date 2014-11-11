@@ -63,6 +63,13 @@ func TestName(t *testing.T) {
 	//fmt.Println(langs.Enum().Name(1))
 }
 
+func TestMustName(t *testing.T) {
+	name := langs.Enum().MustName(langs.Go)
+	if name != "Go" {
+		t.Errorf("\nexpect %v\nactual %v", "Go", name)
+	}
+}
+
 func TestValue(t *testing.T) {
 	enum := langs.Enum()
 	value, _ := enum.Value("Python")
@@ -76,6 +83,13 @@ func TestValue(t *testing.T) {
 	}
 	if value != -1 {
 		t.Errorf("value must be -1 when not found. value = %d", value)
+	}
+}
+
+func TestMustValue(t *testing.T) {
+	value := langs.Enum().MustValue("Python")
+	if value != langs.Python {
+		t.Errorf("\nexpect %v\nactual %v", langs.Python, value)
 	}
 }
 
@@ -95,7 +109,7 @@ var aliasTest AliasTest = AliasTest{
 
 func TestAlias(t *testing.T) {
 	enum := langs.Enum()
-	alias, _ := enum.Alias(3)
+	alias, _ := enum.Alias(langs.Ruby)
 	if alias != "ruby" {
 		t.Errorf("\nexpect %v\nactual %v", "ruby", alias)
 	}
@@ -114,6 +128,13 @@ func TestAlias(t *testing.T) {
 	}
 }
 
+func TestMustAlias(t *testing.T) {
+	alias := langs.Enum().MustAlias(3)
+	if alias != "ruby" {
+		t.Errorf("\nexpect %v\nactual %v", "ruby", alias)
+	}
+}
+
 func TestValueForAlias(t *testing.T) {
 	enum := langs.Enum()
 	value, _ := enum.ValueForAlias("java")
@@ -124,5 +145,12 @@ func TestValueForAlias(t *testing.T) {
 	_, has := enum.ValueForAlias("python3")
 	if has {
 		t.Errorf("Must be has = false")
+	}
+}
+
+func TestMustValueForAlias(t *testing.T) {
+	value := langs.Enum().MustValueForAlias("java")
+	if value != langs.Java {
+		t.Errorf("\nexpect %v\nactual %v", langs.Java, value)
 	}
 }
