@@ -6,9 +6,9 @@ import (
 )
 
 type enumElement struct {
-	value   int
-	name    string
-	alias   string
+	value int
+	name  string
+	alias string
 }
 
 // struct value of Enum
@@ -73,6 +73,19 @@ func (e Enum) Values() []int {
 		values := make([]int, len(e.valuesSlice))
 		copy(values, e.valuesSlice)
 		return values
+	} else {
+		panic("Not implemented yet")
+	}
+}
+
+// Return enum aliases
+func (e Enum) Aliases() []string {
+	if e.structValue != nil {
+		aliases := make([]string, len(e.valuesSlice))
+		for i := 0; i < len(aliases); i++ {
+			aliases[i] = e.elementsMap[e.valuesSlice[i]].alias
+		}
+		return aliases
 	} else {
 		panic("Not implemented yet")
 	}
@@ -162,4 +175,3 @@ func (e Enum) MustAlias(value int) string {
 	}
 	return alias
 }
-

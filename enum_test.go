@@ -94,7 +94,7 @@ func TestMustValue(t *testing.T) {
 }
 
 type AliasTest struct {
-	Exists  int `goenum:exists`
+	Exists    int `goenum:"exists"`
 	NotExists int
 }
 
@@ -103,7 +103,7 @@ func (a AliasTest) Enum() Enum {
 }
 
 var aliasTest AliasTest = AliasTest{
-	Exists: 1,
+	Exists:    1,
 	NotExists: 2,
 }
 
@@ -152,5 +152,21 @@ func TestMustValueForAlias(t *testing.T) {
 	value := langs.Enum().MustValueForAlias("java")
 	if value != langs.Java {
 		t.Errorf("\nexpect %v\nactual %v", langs.Java, value)
+	}
+}
+
+func TestAliases(t *testing.T) {
+	expected := []string{"go", "python", "ruby", "java"}
+	actual := langs.Enum().Aliases()
+	if !reflect.DeepEqual(actual, expected) {
+		t.Errorf("\nexpect %v\nactual %v", actual, expected)
+	}
+}
+
+func TestAliasesExists(t *testing.T) {
+	expected := []string{"exists", ""}
+	actual := aliasTest.Enum().Aliases()
+	if !reflect.DeepEqual(actual, expected) {
+		t.Errorf("\nexpect %v\nactual %v", actual, expected)
 	}
 }
