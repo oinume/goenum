@@ -1,6 +1,6 @@
-all: setup
+all: test
 
-.PHONY: setup
+.PHONY: test
 
 setup:
 	go get golang.org/x/tools/cmd/goimports
